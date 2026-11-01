@@ -1,0 +1,308 @@
+{
+  "name": "covibe",
+  "displayName": "CoVibe",
+  "description": "Run your VS Code work on Google Colab runtimes. Files sync instantly via Google Drive (diff-based), each VM gets its own terminal, multi-language runner (py/js/c/cpp/rs/go/java/sh), CPU/GPU/TPU pair support.",
+  "version": "0.15.6",
+  "publisher": "blakite-ravi",
+  "author": {
+    "name": "Blakite Ravi"
+  },
+  "license": "MIT",
+  "private": true,
+  "icon": "resources/icon.png",
+  "engines": {
+    "vscode": "^1.80.0",
+    "node": ">=18"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "covibe",
+    "colab",
+    "gpu",
+    "drive",
+    "remote",
+    "runner"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RaviHackjr/CoVibe.git"
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "colabPipeBar",
+          "title": "CoVibe",
+          "icon": "resources/activity.svg"
+        }
+      ],
+      "secondarySidebar": [
+        {
+          "id": "colabPipeSideBar",
+          "title": "CoVibe",
+          "icon": "resources/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "colabPipeBar": [
+        {
+          "id": "colabPipe.home",
+          "name": "CoVibe",
+          "type": "webview"
+        },
+        {
+          "id": "colabPipe.runtimes",
+          "name": "Runtimes",
+          "when": "colabPipe.hasTokens"
+        },
+        {
+          "id": "colabPipe.sync",
+          "name": "Sync",
+          "when": "colabPipe.hasTokens"
+        }
+      ],
+      "colabPipeSideBar": [
+        {
+          "id": "colabPipe.homeSide",
+          "name": "CoVibe",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "colabPipe.login",
+        "title": "CoVibe: Sign in with Google (Drive)",
+        "icon": {
+          "light": "resources/login-light.svg",
+          "dark": "resources/login.svg"
+        }
+      },
+      {
+        "command": "colabPipe.logout",
+        "title": "CoVibe: Sign out"
+      },
+      {
+        "command": "colabPipe.pickRuntime",
+        "title": "CoVibe: Assign runtime (full spec picker)"
+      },
+      {
+        "command": "colabPipe.assignCpu",
+        "title": "CoVibe: Assign CPU runtime (add to pair)",
+        "icon": "$(server)"
+      },
+      {
+        "command": "colabPipe.assignGpu",
+        "title": "CoVibe: Assign GPU runtime (add to pair)",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "colabPipe.assignTpu",
+        "title": "CoVibe: Assign TPU runtime (add to pair)"
+      },
+      {
+        "command": "colabPipe.releaseRuntime",
+        "title": "CoVibe: Release runtime"
+      },
+      {
+        "command": "colabPipe.listRuntimes",
+        "title": "CoVibe: List my runtimes"
+      },
+      {
+        "command": "colabPipe.setDefault",
+        "title": "CoVibe: Set default runtime"
+      },
+      {
+        "command": "colabPipe.runOn",
+        "title": "Run on a specific runtime\u2026",
+        "icon": "$(remote-explorer)"
+      },
+      {
+        "command": "colabPipe.openTerminalAt",
+        "title": "CoVibe: Open terminal (runtime)\u2026"
+      },
+      {
+        "command": "colabPipe.refreshRt",
+        "title": "CoVibe: Refresh runtime state"
+      },
+      {
+        "command": "colabPipe.syncAll",
+        "title": "Sync files & outputs"
+      },
+      {
+        "command": "colabPipe.runActive",
+        "title": "Run",
+        "icon": {
+          "light": "resources/icon-run.svg",
+          "dark": "resources/icon-run.svg"
+        }
+      },
+      {
+        "command": "colabPipe.runCmd",
+        "title": "Args",
+        "icon": {
+          "light": "resources/icon-args.svg",
+          "dark": "resources/icon-args.svg"
+        }
+      },
+      {
+        "command": "colabPipe.openTerminal",
+        "title": "Terminal"
+      },
+      {
+        "command": "colabPipe.installToolchain",
+        "title": "CoVibe: Install toolchain..."
+      },
+      {
+        "command": "colabPipe.watchFiles",
+        "title": "CoVibe: Start file watcher",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "colabPipe.cleanRuntime",
+        "title": "CoVibe: Clean remote workspace"
+      },
+      {
+        "command": "colabPipe.connectTerminalAt",
+        "title": "CoVibe: Connect terminal here"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "colabPipe.runActive",
+        "key": "ctrl+alt+r"
+      },
+      {
+        "command": "colabPipe.openTerminal",
+        "key": "ctrl+alt+t"
+      },
+      {
+        "command": "colabPipe.syncAll",
+        "key": "ctrl+alt+y"
+      },
+      {
+        "command": "colabPipe.runCmd",
+        "key": "ctrl+shift+alt+r"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "colabPipe.runActive",
+          "when": "editorIsOpen && resourceScheme != vscode-remote",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "colabPipe.runActive",
+          "when": "editorIsOpen && resourceScheme != vscode-remote",
+          "group": "navigation@3"
+        },
+        {
+          "command": "colabPipe.runCmd",
+          "when": "editorIsOpen && resourceScheme != vscode-remote",
+          "group": "navigation@4"
+        },
+        {
+          "command": "colabPipe.openTerminal",
+          "group": "2_term"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "colabPipe.pickRuntime",
+          "when": "view == colabPipe.runtimes",
+          "group": "navigation@1"
+        },
+        {
+          "command": "colabPipe.releaseRuntime",
+          "when": "view == colabPipe.runtimes",
+          "group": "navigation@2"
+        },
+        {
+          "command": "colabPipe.syncAll",
+          "when": "view == colabPipe.sync",
+          "group": "navigation@1"
+        },
+        {
+          "command": "colabPipe.watchFiles",
+          "when": "view == colabPipe.sync && !colabPipe.watching",
+          "group": "navigation@2"
+        },
+        {
+          "command": "colabPipe.cleanRuntime",
+          "when": "view == colabPipe.sync",
+          "group": "2_cleanup"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CoVibe",
+      "properties": {
+        "colabPipe.remoteRoot": {
+          "type": "string",
+          "default": "/content/ws",
+          "description": "Remote workspace directory on the Colab runtime."
+        },
+        "colabPipe.autoSync": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically push changed files to Drive and pull on runtime after each save."
+        },
+        "colabPipe.autoRun": {
+          "type": "boolean",
+          "default": false,
+          "description": "After each save, also run the saved file on the runtime."
+        },
+        "colabPipe.ignore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".git",
+            "__pycache__",
+            "node_modules",
+            ".venv",
+            "venv",
+            "*.pyc",
+            "*.pyo",
+            ".DS_Store",
+            ".colabdrive*"
+          ],
+          "description": "Folder/file names never synced."
+        },
+        "colabPipe.filesMaxMB": {
+          "type": "number",
+          "default": 5,
+          "description": "Max per-file size (MB) pushed to Drive (multipart limit)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "smoke": "node out/smoke.js",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "@types/ws": "^8.18.0",
+    "@vscode/vsce": "^3.6.0",
+    "typescript": "^5.5.0"
+  }
+}
