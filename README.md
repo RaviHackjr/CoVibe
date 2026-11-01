@@ -1,92 +1,125 @@
-<div align="center">
-
 # CoVibe
 
-**Run anything, anywhere. From your editor.**
+> Run code on remote CPU / GPU / TPU machines directly from VS Code — files sync as you type, output streams in real time, and a full terminal is one keystroke away.
 
-CoVibe pairs VS Code with remote CPU · GPU · TPU machines — files sync as you type,
-runs stream back in real time, and a real terminal is one keystroke away.
+**Version 0.15.6** · [MIT License](LICENSE.md) · VS Code 1.90+
 
-<table><tr><td>v0.15</td><td>works on Windows · macOS · Linux</td><td>MIT licensed</td></tr></table>
-
-</div>
+A private-build editor extension that pairs your local workspace with remote machines: save a file, it is already on the machine; press run, output streams back as the program produces it. Supports Python, JavaScript, shell, Go, C, C++, Rust and Java project layouts, and lets several machines work at once with a default target.
 
 ---
 
-## ✨ What it does
+## Features
 
-| | Feature | Why you'll like it |
-|---|---|---|
-| ▶ | **One-key run** | The active file runs in its native toolchain — Python, JS, shell, Go, C, C++, Rust, Java are detected automatically |
-| ⚡ | **Real-time output** | Unbuffered streaming — output appears as your program prints it, never after exit |
-| ⊙ | **Run with args** | A pre-filled, editable command box (`python3 -u test.py`) — add flags, then Enter |
-| ⇄ | **Instant sync** | Saves fly to the remote machine in milliseconds-sized deltas; outputs come back automatically |
-| 🖥 | **Real terminal** | Full PTY: `htop`, `nano`, colors, Ctrl-C — survives network drops with history intact |
-| 🤖 | **Toolchain one-click** | gcc / g++ / node / go / rust / java — idempotent, never installs twice |
-| 🧩 | **Machine pairs** | CPU + GPU + TPU attached together; a ★ default machine runs everything unless you say otherwise |
+| Feature | Description |
+|---|---|
+| One-key run | Runs the active file in its native toolchain, detected from the file extension |
+| Real-time output | Unbuffered streaming — output appears as the program prints it, not after exit |
+| Run with args | Opens a pre-filled, editable command box (`python3 -u test.py`); edit flags and press Enter |
+| Instant sync | Changes are pushed as deltas on save; generated outputs are pulled back automatically |
+| Integrated terminal | Full PTY over WebSocket: htop, nano, colors, Ctrl-C; history survives network drops |
+| Toolchains | One-click installers for gcc, g++, node, go, rust and java; idempotent |
+| Machine pairs | A CPU + GPU + TPU set can be attached together with a starred default for runs |
 
-Machines come from **Google Colab** — CPU (2 vCPU · 12 GB), GPU (T4 · 16 GB VRAM) and TPU (v5e) are supported out of the box, and yes, the free tier works.
+Machines are provided by your own Google Colab account (CPU 2 vCPU / 12 GB, GPU T4 / 16 GB VRAM, TPU v5e). The free tier works.
 
 ---
 
-## 🚀 Getting started
+## Installation
 
-```text
-1. Install:     code --install-extension covibe-x.y.z.vsix
-2. Reload:      Ctrl+Shift+P → "Developer: Reload Window"
-3. Sign in:     click the CoVibe icon → "Sign in with Google"
-4. Pick a box:  CPU / GPU / TPU card — done, files are already syncing
-5. Open a file: press Ctrl+Alt+R — output starts streaming
+### 1. Download
+
+Download `covibe-0.15.6.vsix` from [Releases](https://github.com/RaviHackjr/CoVibe/releases/latest).
+
+### 2. Install
+
+**Option A — command line:**
+
+```bash
+code --install-extension covibe-0.15.6.vsix
 ```
 
-First connect pushes the **whole workspace folder**; every later save pushes only what changed.
+**Option B — VS Code UI:** open the **Extensions** view, click the **⋯** menu, choose **Install from VSIX...** and select the downloaded file.
+
+**Option C — one-liner (Windows PowerShell):**
+
+```powershell
+Invoke-WebRequest "https://github.com/RaviHackjr/CoVibe/releases/download/v0.15.6/covibe-0.15.6.vsix" -OutFile covibe-0.15.6.vsix; code --install-extension covibe-0.15.6.vsix
+```
+
+### 3. Reload
+
+`Ctrl+Shift+P` → **Developer: Reload Window**.
 
 ---
 
-## ⌨️ Keymap
+## Getting started
+
+1. Click the **CoVibe** icon in the Activity Bar.
+2. Choose **Sign in with Google**. Tokens are stored in the OS keychain and refreshed automatically.
+3. Pick a machine card — **CPU**, **GPU** or **TPU** — or use **CoVibe: Assign runtime** from the palette for the full spec list.
+4. Open any file in the workspace. The first save pushes the **complete folder** to the machine; later saves push only what changed.
+5. Press **Ctrl+Alt+R** to run.
+
+---
+
+## Usage
+
+### Editor buttons
+
+With a file open, two buttons appear at the top right of the editor:
+
+- **▶ Run** — runs the current file immediately.
+- **⟨/⟩ Run with args** — opens a pre-filled command input; edit it for extra flags (`python3 -m pkg.main --fast`) and press Enter to run as-is.
+
+### Keybindings
 
 | Action | Key |
 |---|---|
-| Run active file | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> |
-| Run with args (editable, pre-filled) | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd> |
-| Machine terminal | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>T</kbd> |
-| Full sync (push + pull) | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Y</kbd> |
+| Run active file | `Ctrl+Alt+R` |
+| Run with args | `Ctrl+Shift+Alt+R` |
+| Machine terminal | `Ctrl+Alt+T` |
+| Full sync (push + pull) | `Ctrl+Alt+Y` |
 
-Hover any editor button or panel button — its shortcut is shown right there.
+Hover any button to see its shortcut.
 
-## 🖱 Editor buttons
+### Command palette commands
 
-Any file open → top-right shows:
-
-- **▶** — run it now, stream output
-- **🖥 ⟨/⟩** — run-with-args input (comes pre-filled; edit for flags like `python3 -m pkg.main --fast`, Enter runs as-is)
-
-## 📋 Commands (palette)
-
-`Sign in / Sign out` · `Assign runtime — full spec picker` · `Assign CPU/GPU/TPU` ·
-`Set default runtime (★)` · `Run active file` · `Run on a specific runtime…` ·
-`Run command…` · `Open terminal (by runtime)` · `Full sync` · `File watcher (on/off)` ·
-`List runtimes` · `Release runtime` · `Install toolchain…` · `Clean remote workspace`
-
-## ⚙️ Settings
-
-| Setting | Default | |
-|---|---|---|
-| `colabPipe.remoteRoot` | `/content/ws` | where your workspace lives on the machine |
-| `colabPipe.ignore` | `.git, __pycache__, node_modules, .venv, venv, *.pyc` | transfer ignore list |
-| `colabPipe.autoSync` | `true` | save ⇒ instant push |
-| `colabPipe.autoRun` | `false` | also run after save |
-| `colabPipe.filesMaxMB` | `36` | skip transfers above this size |
+| Command | Description |
+|---|---|
+| `CoVibe: Sign in` / `Sign out` | OAuth login; tokens go to the OS keychain |
+| `CoVibe: Assign runtime (full spec picker)` | Choose any eligible machine spec |
+| `CoVibe: Assign CPU/GPU/TPU runtime` | One-click machine add |
+| `CoVibe: Set default runtime` | Starred machine used by runs and sync |
+| `CoVibe: Run active file` | Push + run with real-time output |
+| `CoVibe: Run active file on…` | Run on a specific machine in the pair |
+| `CoVibe: Run command...` | Pre-filled, editable shell command |
+| `CoVibe: Open terminal` / `Open terminal (runtime)…` | PTY terminal, per machine |
+| `CoVibe: Full sync` | Push changed files and pull outputs |
+| `CoVibe: Start file watcher` | Save-to-push loop on/off |
+| `CoVibe: Install toolchain...` | gcc / node / go / rust / java / C |
+| `CoVibe: Clean remote workspace` | Removes the remote workspace directory |
 
 ---
 
-## 🧭 Good to know
+## Configuration
 
-- Releasing a machine (✕) wipes its sync state — the next assign re-pushes everything, so stale mappings never bite.
-- Files over ~36 MB are skipped with a visible note — load heavy datasets directly and keep them in `ignore`.
-- One terminal per machine, tmux-backed — typing survives disconnects.
-- Not affiliated with Google; runtimes are your own Colab sessions under your account.
+| Setting | Default | Description |
+|---|---|---|
+| `colabPipe.remoteRoot` | `/content/ws` | Workspace directory on the remote machine |
+| `colabPipe.ignore` | `.git, __pycache__, node_modules, .venv, venv, *.pyc` | Transfer ignore list |
+| `colabPipe.autoSync` | `true` | Push on save |
+| `colabPipe.autoRun` | `false` | Also run after save |
+| `colabPipe.filesMaxMB` | `36` | Skip transfers larger than this size |
 
-## 📝 License
+---
 
-[MIT](LICENSE.md) — © Blakite Ravi
+## Notes
+
+- Releasing a machine wipes its sync state, so the next attach pushes the whole folder again — no stale mappings.
+- Files over the size limit are skipped with a visible log; keep large datasets in the ignore list.
+- Terminal sessions are tmux-backed and auto-reconnect.
+- Not affiliated with Google. Runtimes are your own Colab sessions under your own account, and usage follows Google Colab's Terms of Service.
+
+## License
+
+Released under the [MIT License](LICENSE.md). © 2026 Blakite Ravi.
